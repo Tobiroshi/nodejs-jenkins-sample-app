@@ -1,44 +1,50 @@
 pipeline {
     agent any
-
+    
     environment {
-        IMAGE_NAME = "nodejs-app"
+        DOCKER_IMAGE    = "jenkins-demo-app"
+        DOCKER_TAG      = "${BUILD_NUMBER}"
+        CONTAINER_NAME  = "jenkins-demo-container"
     }
-
+    
     stages {
         stage('Checkout') {
             steps {
-                // Récupérer le code depuis le dépôt
+                // TODO: Récupérer le code source
                 checkout scm
             }
         }
-
-        stage('Install deps') {
+        
+        stage('Install Dependencies') {
             steps {
+                // TODO: Installer les dépendances
                 sh 'npm install'
             }
         }
-
-        stage('Tests') {
+        
+        stage('Run Tests') {
             steps {
+                // TODO: Lancer les tests
                 sh 'npm test'
             }
         }
-
-        stage('Build Docker image') {
+        
+        stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} .'
+                // TODO: Construire l\'image Docker
+                sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
             }
         }
-
-        stage('Run container') {
+        
+        stage('Deploy') {
             steps {
-                sh '''
-                    # On supprime l’ancien conteneur s’il existe
-                    docker rm -f nodejs-container || true
-                    # On lance le nouveau sur le port 3000
-                    docker run -d --name nodejs-container -p 3000:3000 ${IMAGE_NAME}:${BUILD_NUMBER}
-                '''
+                // TODO: Déployer le conteneur
+                // Arrêter l'ancien conteneur s'il existe 
+                // Démarrer le nouveau conteneur avec la nouvelle version
+                sh """
+                    docker rm -f ${CONTAINER_NAME} || true
+                    docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}
+                """
             }
         }
     }
