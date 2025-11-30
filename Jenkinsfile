@@ -62,7 +62,6 @@ pipeline {
         post {
             success {
                 // TODO: Nettoyer les anciennes images Docker
-                // Ici on supprime les images "dangling" non utilisées
                 sh 'docker image prune -f'
                 }    
             }
