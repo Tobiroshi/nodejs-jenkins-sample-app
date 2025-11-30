@@ -5,6 +5,7 @@ pipeline {
         DOCKER_IMAGE    = "jenkins-demo-app"
         DOCKER_TAG      = "${BUILD_NUMBER}"
         CONTAINER_NAME  = "jenkins-demo-container"
+        SCANNER_HOME    = tool 'sonar-scanner'
     }
     
     stages {
@@ -33,7 +34,7 @@ pipeline {
             steps {
                 // TODO: Analyser le code avec SonarQube
                 withSonarQubeEnv('sonar-server') {
-                    sh 'sonar-scanner'
+                    sh "${SCANNER_HOME}/bin/sonar-scanner"
                 }
             }
         }
