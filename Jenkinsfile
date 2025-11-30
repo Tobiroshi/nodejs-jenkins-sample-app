@@ -54,8 +54,10 @@ pipeline {
                     docker rm -f ${CONTAINER_NAME} || true
                     docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}
                 """
+                }
             }
         }
+    
         post {
             success {
                 // TODO: Nettoyer les anciennes images Docker
@@ -63,5 +65,4 @@ pipeline {
                 sh 'docker image prune -f'
                 }    
             }
-        }
     }
