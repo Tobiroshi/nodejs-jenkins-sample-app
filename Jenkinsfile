@@ -28,6 +28,15 @@ pipeline {
                 sh 'npm test'
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                // TODO: Analyser le code avec SonarQube
+                withSonarQubeEnv('sonar-server') {
+                    sh 'sonar-scanner'
+                }
+            }
+        }
         
         stage('Build Docker Image') {
             steps {
@@ -47,5 +56,12 @@ pipeline {
                 """
             }
         }
+        post {
+            success {
+                // TODO: Nettoyer les anciennes images Docker
+                // Ici on supprime les images "dangling" non utilisées
+                sh 'docker image prune -f'
+                }    
+            }
+        }
     }
-}
